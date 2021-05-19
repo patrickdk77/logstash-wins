@@ -1,5 +1,5 @@
 {
-  "name": "logstash-tcp-wins",
+  "name": "@erdebaru/logstash-tcp-wins",
   "version": "1.0.17",
   "description": "A TCP Logstash tranport for Winston",
   "main": "./index.js",
