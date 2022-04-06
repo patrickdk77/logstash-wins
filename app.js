@@ -36,5 +36,7 @@ setInterval(() => {
     logger.debug({
         stuff:"Hi!",
         id: x++
+    }, {
+        customMeta: 'custom meta'
     });
 },100)

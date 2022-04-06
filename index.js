@@ -50,11 +50,8 @@ module.exports = class LogstashTCP extends Transport {
 
     sendToLogstash(log){
         let logEntry = this._transform(log, null);
-        logEntry = logEntry.transform({
-            level: log.level,
-            message: log.message,
-            label: this._label
-        })
+        log.label = this._label;
+        logEntry = logEntry.transform(log);
         this._socket.write(JSON.stringify(logEntry) + "\n");
         this.emit('logged', logEntry);
     }
