@@ -69,6 +69,7 @@ module.exports = class LogstashTCP extends Transport {
         });
 
         this._socket.on("ready", (conn) => {
+            this.processLogQueue();
         })
         
         this._socket.on("connect", () => {
@@ -78,9 +79,9 @@ module.exports = class LogstashTCP extends Transport {
             clearInterval(this._interval);
             this._interval = null;
             // wait 60s for socket to be ready
-            setTimeout(()=> {
-                this.processLogQueue();
-            }, 60000);
+            //setTimeout(()=> {
+            //    this.processLogQueue();
+            //}, 5000);
         });
 
         this._socket.on("error", (error) => {
