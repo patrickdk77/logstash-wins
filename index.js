@@ -17,7 +17,7 @@ module.exports = class LogstashTCP extends Transport {
         this._host = opts.host || "localhost";
         this._label = opts.label;
         this._maxRetries = opts.maxRetries || 1000;
-        this._retryInterval = opts.retryInterval || 100;
+        this._retryInterval = opts.retryInterval || 1000;
         this._logQueue = [];
         this._transform = opts.transformer || defaultTransform;
         this._connected = false;
@@ -42,9 +42,7 @@ module.exports = class LogstashTCP extends Transport {
         }
 
         this._logQueue.push(info);
-        if(this._connected){
-            this.processLogQueue();
-        }
+        this.processLogQueue();
         callback(); 
     }
 
@@ -57,9 +55,11 @@ module.exports = class LogstashTCP extends Transport {
     }
 
     processLogQueue() {
-        while(this._logQueue.length > 0){
-            let log = this._logQueue.shift()
-            this.sendToLogstash(log);
+        if(this._connected) {
+            while(this._logQueue.length > 0){
+                let log = this._logQueue.shift()
+                this.sendToLogstash(log);
+            }
         }
     }
     
@@ -85,20 +85,34 @@ module.exports = class LogstashTCP extends Transport {
         });
 
         this._socket.on("error", (error) => {
-            this.emit('error', error);
+            this._connected = false;
+            if(this._socket && (typeof this._socket !== 'undefined'))
+                this._socket.destroy();
+            if(!this._retrying){
+                this.retryConnection();
+            }   
         })
         
         this._socket.on("drain", (msg) => {
+            this.processLogQueue();
         })
         
         this._socket.on("end", (msg) => {
         })
         
         this._socket.on("timeout", (msg) => {
+            this._connected = false;
+            if(this._socket && (typeof this._socket !== 'undefined'))
+                this._socket.destroy();
+            if(!this._retrying){
+                this.retryConnection();
+            }   
         })
 
         this._socket.on("close", (msg) => {            
             this._connected = false;
+            if(this._socket && (typeof this._socket !== 'undefined'))
+                this._socket.destroy();
             if(!this._retrying){
                 this.retryConnection();
             }   
