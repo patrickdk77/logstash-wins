@@ -82,7 +82,6 @@ module.exports = class LogstashTCP extends Transport {
         that._connected = false;
         that._retrying = false;
         that._currentRetry = 0;
-        console.log('type=',typeof(that._socket));
         if(that._socket && (typeof that._socket !== 'undefined')) {
             that._socket.end();
             //that._socket.destroy();
