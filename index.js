@@ -26,7 +26,8 @@ module.exports = class LogstashTCP extends Transport {
         this._silent = false;
         this._currentRetry = 0;
         this._retrying = false;
-        this.connect();
+        if(!opts.idle)
+            this.connect();
     }
     
     log(info, callback) {
