@@ -1,5 +1,4 @@
 const net = require('net');
-const socket = new net.Socket();
 
 const Transport = require('winston-transport');
 const {format} = require('winston');
@@ -102,9 +101,8 @@ module.exports = class LogstashTCP extends Transport {
             readable: false
         });
         this._socket.setDefaultEncoding("utf8");
-        this._socket.connect(this._port, this._host, function(){
-            socket.setKeepAlive(true, this._keepalive);
-        });
+        this._socket.setMaxListeners(35);
+        this._socket.connect(this._port, this._host, function(){});
 
         this._socket.on("ready", (conn) => {
             this.processLogQueue();
@@ -117,6 +115,7 @@ module.exports = class LogstashTCP extends Transport {
             if(this._interval)
                 clearInterval(this._interval);
             this._interval = null;
+            this._socket.setKeepAlive(true, this._keepalive);
             // wait 60s for socket to be ready
             //setTimeout(()=> {
             //    this.processLogQueue();
