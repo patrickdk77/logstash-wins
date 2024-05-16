@@ -1,5 +1,8 @@
 # Logstash TCP Wins
-Inspired by the winston-logstash module but as that isn't actively maintained and doesn't support 3.0.0 of Winston, I decided to create my own
+Rewritten to be lambda friendly, add typescript defs
+
+forked from rcoundon/logstash-wins
+  Inspired by the winston-logstash module but as that isn't actively maintained and doesn't support 3.0.0 of Winston, I decided to create my own
 
 ## A Transport for Winston that allows for the sending of data to the Logstash TCP input plugin
 

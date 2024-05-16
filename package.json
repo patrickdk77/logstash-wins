@@ -1,12 +1,12 @@
 {
   "name": "@patrickdk77/logstash-wins",
-  "version": "1.0.18",
+  "version": "2.0.0",
   "description": "A TCP Logstash tranport for Winston",
   "main": "./index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Ross Coundon",
+  "author": "Patrick Domack",
   "license": "ISC",
   "dependencies": {
     "winston": "^3.9.0",
